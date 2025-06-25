@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Financiación - Río Shop</title>
+    <style>
+        @media print {
+            body {
+                margin: 0;
+                padding: 10mm;
+            }
+            .container {
+                width: 100%;
+                max-width: none;
+                box-shadow: none !important;
+                border: 2px solid #000 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: white;
+            border: 2px solid #000;
+            padding: 0;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 2px solid #000;
+        }
+        
+        .logo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding-left: 24px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+            border-radius: 50%;
+        }
+        
+        .date-display {
+            font-size: 12px;
+            color: #333;
+        }
+        
+        .discount-section {
+            text-align: center;
+            border: 2px solid #000;
+            padding: 10px 20px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .discount-percent {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 0;
+            line-height: 1;
+        }
+        
+        .discount-text {
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.3;
+            font-weight: bold;
+            text-align: left;
+        }
+        
+        .price-section {
+            text-align: center;
+            padding: 15px;
+            border-bottom: 2px solid #000;
+        }
+        
+        .cash-price {
+            font-size: 52px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .product-name {
+            font-size: 16px;
+            margin: 5px 0;
+            text-transform: uppercase;
+        }
+        
+        .list-price-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 2px solid #000;
+        }
+        
+        .list-price {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        .financing-header {
+            background-color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 20px;
+            letter-spacing: 8px;
+            font-weight: bold;
+            border-bottom: 2px solid #000;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            border: 1px solid #000;
+            padding: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            background-color: #f0f0f0;
+        }
+        
+        td {
+            border: 1px solid #000;
+            padding: 8px 5px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .plan-cell {
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        
+        .payment-icons {
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+        }
+        
+        .payment-icon {
+            border: 1px solid #999;
+            border-radius: 3px;
+            padding: 2px 4px;
+            font-size: 8px;
+            background-color: #f5f5f5;
+        }
+        
+        .installments {
+            font-size: 40px;
+            font-weight: bold;
+        }
+        
+        .discount-cell {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .cuota-cell,
+        .total-cell {
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .input-section {
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-bottom: 2px solid #000;
+        }
+        
+        .input-group {
+            margin: 10px 0;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #999;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        .btn-calculate {
+            background-color: #333;
+            color: white;
+            padding: 12px;
+            border: none;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .btn-calculate:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-section no-print">
+            <div class="input-group">
+                <label for="productName">Nombre del Producto:</label>
+                <input type="text" id="productName" placeholder="KIT DE COCINA MONTESA 6P 2C 160.7X196X38.8CM">
+            </div>
+            <div class="input-group">
+                <label for="productCode">Código/Descripción adicional:</label>
+                <input type="text" id="productCode" placeholder="ART. 2907-8977-8905 FREJJOCRIS GUIAS TELESCOPICAS...">
+            </div>
+            <div class="input-group">
+                <label for="basePrice">Precio de Lista ($):</label>
+                <input type="number" id="basePrice" placeholder="359999.90" step="0.01">
+            </div>
+            <button class="btn-calculate" onclick="calculateFinancing()">Calcular Financiación</button>
+        </div>
+        
+        <div class="header">
+            <div class="logo-section">
+                <div class="logo">
+                    <img src="https://res.cloudinary.com/djtvjkcu6/image/upload/v1750889144/MegaMuebles/logo_redes1_txcyly.jpg" alt="Logo de la empresa">
+                </div>
+                <span class="date-display" id="currentDate"></span>
+            </div>
+            <div class="discount-section">
+                <p class="discount-percent">-40%</p>
+                <p class="discount-text">DESCUENTO<br>CONTADO<br>VALOR UNITARIO</p>
+            </div>
+        </div>
+        
+        <div class="price-section">
+            <div class="cash-price" id="cashPrice">$215.999,94</div>
+            <div class="product-name" id="productInfo">KIT DE COCINA MONTESA 6P 2C 160.7X196X38.8CM ART. 2907-8977-8905<br>FREJJOCRIS GUIAS TELESCOPICAS PATAS AJUSTABLES VOL3</div>
+        </div>
+        
+        <div class="list-price-section">
+            <div class="list-price" id="listPrice">$ 359.999,90</div>
+            <div class="list-price-clarification" style="font-size:36px; color:#fff; background:#000; font-weight:bold; margin-left:15px; padding:2px 16px; border-radius:8px;">2x1</div>
+        </div>
+        
+        <div class="financing-header">FINANCIACIÓN</div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>PLAN</th>
+                    <th>PAGOS</th>
+                    <th>DESCUENTO</th>
+                    <th>CUOTA</th>
+                    <th>TOTAL</th>
+                </tr>
+            </thead>
+            <tbody id="financingTable">
+                <!-- Rows will be populated by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function formatNumber(num) {
+            return num.toLocaleString('es-AR', { 
+                minimumFractionDigits: 2, 
+                maximumFractionDigits: 2 
+            }).replace(/,/g, '.');
+        }
+
+        function calculateFinancing() {
+            const productName = document.getElementById('productName').value || 'PRODUCTO';
+            const productCode = document.getElementById('productCode').value || '';
+            const basePrice = parseFloat(document.getElementById('basePrice').value) || 0;
+            
+            if (basePrice <= 0) {
+                alert('Por favor ingrese un precio válido');
+                return;
+            }
+
+            // Calcular precios según nuevos descuentos
+            // Efectivo: 40% descuento
+            const cashPrice = basePrice * 0.6;
+            // Transferencia/Débito: 35% descuento
+            const debitPrice = basePrice * 0.65;
+            // 1 cuota: 30% descuento
+            const oneInstallmentPrice = basePrice * 0.7;
+            // 3 cuotas: 20% descuento
+            const threeInstallmentPrice = basePrice * 0.8;
+            // 6 cuotas: 5% descuento
+            const sixInstallmentPrice = basePrice * 0.85;
+
+            // Actualizar display
+            document.getElementById('cashPrice').textContent = '$' + formatNumber(cashPrice);
+            document.getElementById('listPrice').textContent = '$ ' + formatNumber(basePrice);
+            document.getElementById('productInfo').innerHTML = productName.toUpperCase() + 
+                (productCode ? '<br>' + productCode.toUpperCase() : '');
+
+            // Planes de financiación adaptados
+            const plans = [
+                { name: 'Efectivo', payments: 1, discount: 40, total: cashPrice, monthly: cashPrice, icon: '💵' },
+                { name: 'Transferencia/Débito', payments: 1, discount: 35, total: debitPrice, monthly: debitPrice, icon: '🏦' },
+                { name: '1 Cuota', payments: 1, discount: 30, total: oneInstallmentPrice, monthly: oneInstallmentPrice, icon: '💳' },
+                { name: '3 Cuotas', payments: 3, discount: 20, total: threeInstallmentPrice, monthly: threeInstallmentPrice / 3, icon: '💳' },
+                { name: '6 Cuotas', payments: 6, discount: 15, total: sixInstallmentPrice, monthly: sixInstallmentPrice / 6, icon: '💳' }
+            ];
+
+            // Limpiar y poblar tabla
+            const tbody = document.getElementById('financingTable');
+            tbody.innerHTML = '';
+
+            plans.forEach(plan => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${plan.icon} ${plan.name}</td>
+                    <td class="installments">${plan.payments}</td>
+                    <td class="discount-cell">-${plan.discount}%</td>
+                    <td class="cuota-cell">$ ${formatNumber(plan.monthly)}</td>
+                    <td class="total-cell">$ ${formatNumber(plan.total)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        // Allow Enter key to calculate
+        document.getElementById('basePrice').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                calculateFinancing();
+            }
+        });
+        
+        // Load example on start
+        window.onload = function() {
+            // Set current date
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const year = today.getFullYear();
+            document.getElementById('currentDate').textContent = `${day}/${month}/${year}`;
+            
+            // Load example data
+            document.getElementById('productName').value = 'KIT DE COCINA MONTESA 6P 2C 160.7X196X38.8CM';
+            document.getElementById('productCode').value = 'ART. 2907-8977-8905 FREJJOCRIS GUIAS TELESCOPICAS PATAS AJUSTABLES VOL3';
+            document.getElementById('basePrice').value = '359999.90';
+            calculateFinancing();
+        };
+    </script>
+</body>
+</html>
