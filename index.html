@@ -6,26 +6,64 @@
     <title>Calculadora de Financiación - Río Shop</title>
     <style>
         @media print {
-            .two-for-one-box {
-                background: #000 !important;
-                color: #fff !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
+            @page {
+                size: A4;
+                margin: 5mm;
             }
 
             body {
                 margin: 0;
-                padding: 10mm;
+                padding: 0;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
+
             .container {
                 width: 100%;
                 max-width: none;
                 box-shadow: none !important;
-                border: 2px solid #000 !important;
+                border: 1px solid #000 !important;
+                padding: 10px;
+                margin: 0 auto;
             }
+
             .no-print {
                 display: none !important;
             }
+
+            .header, .price-section, .list-price-section, .financing-header {
+                padding: 3px 8px;
+                margin-bottom: 5px;
+            }
+
+            .cash-price { font-size: 42px; }
+            .list-price { font-size: 24px; }
+            .two-for-one-box { font-size: 24px; padding: 4px 8px; }
+            .product-name { font-size: 14px; font-weight: bold; padding: 5px; border-bottom: 1px solid #000; }
+            .product-description { font-size: 10px; line-height: 1.2; }
+            .financing-header { font-size: 14px; letter-spacing: 3px; padding: 2px; margin-top: 10px; }
+
+            table {
+                font-size: 9px;
+                width: 100%;
+                margin-top: 5px;
+            }
+
+            th, td {
+                padding: 3px;
+                font-size: 8px;
+            }
+
+            .installments { font-size: 24px; }
+            .discount-cell { font-size: 16px; }
+
+            .logo {
+                width: 70px;
+                height: 70px;
+            }
+
+            .discount-percent { font-size: 32px; }
+            .discount-text { font-size: 9px; }
         }
         
         body {
@@ -44,8 +82,9 @@
         
         .header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
+            gap: 30px;
             padding: 10px 15px;
             border-bottom: 2px solid #000;
         }
@@ -55,12 +94,11 @@
             flex-direction: column;
             align-items: center;
             gap: 5px;
-            padding-left: 24px;
         }
         
         .logo {
-            width: 100px;
-            height: 100px;
+            width: 160px;
+            height: 160px;
         }
 
         .logo img {
@@ -106,15 +144,25 @@
         }
         
         .cash-price {
-            font-size: 62px;
-            font-weight: bold;
+            font-size: 36px; /* Reducido para menor énfasis */
+            font-weight: normal;
+            color: #4a4a4a;
             margin: 10px 0;
         }
         
         .product-name {
-            font-size: 16px;
-            margin: 5px 0;
+            font-size: 22px;
+            font-weight: bold;
             text-transform: uppercase;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .product-description {
+            font-size: 16px;
+            line-height: 1.3;
+            color: #4a4a4a;
+            margin-top: 5px;
         }
         
         .list-price-section {
@@ -134,11 +182,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 36px;
+    font-size: 62px; /* Aumentado para mayor énfasis */
     font-weight: bold;
     background: #f5f5f5;
     color: #222;
-    height: 60px;
+    height: 80px;
 }
 .two-for-one-box {
     background: #000;
@@ -146,21 +194,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 36px;
+    font-size: 62px; /* Aumentado para mayor énfasis */
     font-weight: bold;
     padding: 0 24px;
-    height: 60px;
+    height: 80px;
     border-radius: 0 8px 8px 0;
 }
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 15px;
-            border-bottom: 2px solid #000;
-        }
-        
-        .list-price {
-            font-size: 32px;
             font-weight: bold;
         }
         
@@ -294,19 +333,22 @@
         <div class="header">
             <div class="logo-section">
                 <div class="logo">
-                    <img src="https://res.cloudinary.com/djtvjkcu6/image/upload/v1750889144/MegaMuebles/logo_redes1_txcyly.jpg" alt="Logo de la empresa">
+                    <img src="https://res.cloudinary.com/djtvjkcu6/image/upload/v1751206020/MegaMuebles/logoRedondo_f7kulu.png" alt="Logo de la empresa">
                 </div>
                 <span class="date-display" id="currentDate"></span>
             </div>
-            <div class="discount-section">
-                <p class="discount-percent">-40%</p>
-                <p class="discount-text">DESCUENTO<br>CONTADO<br>VALOR UNITARIO</p>
+            <div class="info-section">
+                <div class="product-name" id="productNameDisplay"></div>
+                <div class="discount-section">
+                    <p class="discount-percent">-40%</p>
+                    <p class="discount-text">DESCUENTO<br>CONTADO<br>VALOR UNITARIO</p>
+                </div>
             </div>
         </div>
         
         <div class="price-section">
             <div class="cash-price" id="cashPrice">$215.999,94</div>
-            <div class="product-name" id="productInfo">KIT DE COCINA MONTESA 6P 2C 160.7X196X38.8CM ART. 2907-8977-8905<br>FREJJOCRIS GUIAS TELESCOPICAS PATAS AJUSTABLES VOL3</div>
+            <div class="product-description" id="productCodeDisplay"></div>
         </div>
         
         <div class="list-price-section">
@@ -316,8 +358,7 @@
             </div>
         </div>
         
-        <div class="financing-header">FINANCIACIÓN</div>
-        
+        <div class="financing-header">FINANCIACIÓN UNIDAD</div>
         <table>
             <thead>
                 <tr>
@@ -328,9 +369,21 @@
                     <th>TOTAL</th>
                 </tr>
             </thead>
-            <tbody id="financingTable">
-                <!-- Rows will be populated by JavaScript -->
-            </tbody>
+            <tbody id="financingTableUnit"></tbody>
+        </table>
+
+        <div class="financing-header" style="margin-top: 20px;">FINANCIACIÓN 2x1</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>PLAN</th>
+                    <th>PAGOS</th>
+                    <th>RECARGO</th>
+                    <th>CUOTA</th>
+                    <th>TOTAL</th>
+                </tr>
+            </thead>
+            <tbody id="financingTable2x1"></tbody>
         </table>
     </div>
 
@@ -353,46 +406,64 @@
             }
 
             // Calcular precios según nuevos descuentos
-            // Efectivo: 40% descuento
             const cashPrice = basePrice * 0.6;
-            // Transferencia/Débito: 35% descuento
             const debitPrice = basePrice * 0.65;
-            // 1 cuota: 30% descuento
             const oneInstallmentPrice = basePrice * 0.7;
-            // 3 cuotas: 20% descuento
             const threeInstallmentPrice = basePrice * 0.8;
-            // 6 cuotas: 5% descuento
             const sixInstallmentPrice = basePrice * 0.85;
 
             // Actualizar display
             document.getElementById('cashPrice').textContent = '$' + formatNumber(cashPrice);
             document.getElementById('listPrice').textContent = '$ ' + formatNumber(basePrice);
-            document.getElementById('productInfo').innerHTML = productName.toUpperCase() + 
-                (productCode ? '<br>' + productCode.toUpperCase() : '');
+            document.getElementById('productNameDisplay').textContent = productName.toUpperCase();
+            document.getElementById('productCodeDisplay').innerHTML = (productCode ? productCode.toUpperCase() : '');
 
-            // Planes de financiación adaptados
-            const plans = [
-                { name: 'Efectivo', payments: 1, discount: 40, total: cashPrice, monthly: cashPrice, icon: '💵' },
-                { name: 'Transferencia/Débito', payments: 1, discount: 35, total: debitPrice, monthly: debitPrice, icon: '🏦' },
-                { name: '1 Cuota', payments: 1, discount: 30, total: oneInstallmentPrice, monthly: oneInstallmentPrice, icon: '💳' },
-                { name: '3 Cuotas', payments: 3, discount: 20, total: threeInstallmentPrice, monthly: threeInstallmentPrice / 3, icon: '💳' },
-                { name: '6 Cuotas', payments: 6, discount: 15, total: sixInstallmentPrice, monthly: sixInstallmentPrice / 6, icon: '💳' }
+            // 1. Planes para VALOR UNITARIO (con descuentos)
+            const unitPlans = [
+                { name: 'Efectivo', payments: 1, discount: 40, total: cashPrice, monthly: cashPrice },
+                { name: 'Transferencia/Débito', payments: 1, discount: 35, total: debitPrice, monthly: debitPrice },
+                { name: '1 Cuota', payments: 1, discount: 30, total: oneInstallmentPrice, monthly: oneInstallmentPrice },
+                { name: '3 Cuotas', payments: 3, discount: 20, total: threeInstallmentPrice, monthly: threeInstallmentPrice / 3 },
+                { name: '6 Cuotas', payments: 6, discount: 15, total: sixInstallmentPrice, monthly: sixInstallmentPrice / 6 }
             ];
 
-            // Limpiar y poblar tabla
-            const tbody = document.getElementById('financingTable');
-            tbody.innerHTML = '';
+            // 2. Planes para VALOR 2x1 (con recargos sobre precio de lista)
+            const twoForOnePlans = [
+                { name: 'Transferencia/Débito', payments: 1, surcharge: 5, total: basePrice * 1.05, monthly: basePrice * 1.05 },
+                { name: '1 Cuota', payments: 1, surcharge: 10, total: basePrice * 1.10, monthly: basePrice * 1.10 },
+                { name: '3 Cuotas', payments: 3, surcharge: 18, total: basePrice * 1.18, monthly: (basePrice * 1.18) / 3 },
+                { name: 'Plan Z', payments: 3, surcharge: 18, total: basePrice * 1.18, monthly: (basePrice * 1.18) / 3 },
+                { name: '6 Cuotas', payments: 6, surcharge: 25, total: basePrice * 1.25, monthly: (basePrice * 1.25) / 6 }
+            ];
 
-            plans.forEach(plan => {
+            // Poblar tabla de VALOR UNITARIO
+            const tbodyUnit = document.getElementById('financingTableUnit');
+            tbodyUnit.innerHTML = '';
+            unitPlans.forEach(plan => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${plan.icon} ${plan.name}</td>
+                    <td>${plan.name}</td>
                     <td class="installments">${plan.payments}</td>
                     <td class="discount-cell">-${plan.discount}%</td>
                     <td class="cuota-cell">$ ${formatNumber(plan.monthly)}</td>
                     <td class="total-cell">$ ${formatNumber(plan.total)}</td>
                 `;
-                tbody.appendChild(row);
+                tbodyUnit.appendChild(row);
+            });
+
+            // Poblar tabla de VALOR 2x1
+            const tbody2x1 = document.getElementById('financingTable2x1');
+            tbody2x1.innerHTML = '';
+            twoForOnePlans.forEach(plan => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${plan.name}</td>
+                    <td class="installments">${plan.payments}</td>
+                    <td class="discount-cell">+${plan.surcharge}%</td>
+                    <td class="cuota-cell">$ ${formatNumber(plan.monthly)}</td>
+                    <td class="total-cell">$ ${formatNumber(plan.total)}</td>
+                `;
+                tbody2x1.appendChild(row);
             });
         }
         
@@ -413,8 +484,8 @@
             document.getElementById('currentDate').textContent = `${day}/${month}/${year}`;
             
             // Load example data
-            document.getElementById('productName').value = 'KIT DE COCINA MONTESA 6P 2C 160.7X196X38.8CM';
-            document.getElementById('productCode').value = 'ART. 2907-8977-8905 FREJJOCRIS GUIAS TELESCOPICAS PATAS AJUSTABLES VOL3';
+            document.getElementById('productName').value = 'KIT DE COCINA MONTESA';
+            document.getElementById('productCode').value = ' 6P 2C 160.7X196X38.8CM FREJJOCRIS GUIAS TELESCOPICAS PATAS AJUSTABLES VOL3';
             document.getElementById('basePrice').value = '359999.90';
             calculateFinancing();
         };
