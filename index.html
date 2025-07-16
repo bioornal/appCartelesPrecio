@@ -40,7 +40,7 @@
             .list-price { font-size: 24px; }
             .two-for-one-box { font-size: 24px; padding: 4px 8px; }
             .product-name { font-size: 14px; font-weight: bold; padding: 5px; border-bottom: 1px solid #000; }
-            .product-description { font-size: 10px; line-height: 1.2; }
+            .product-description { font-size: 10px; line-height: 1.2; text-align: justify; }
             .financing-header { font-size: 14px; letter-spacing: 3px; padding: 2px; margin-top: 10px; }
 
             table {
@@ -163,6 +163,7 @@
             line-height: 1.3;
             color: #4a4a4a;
             margin-top: 5px;
+            text-align: justify;
         }
         
         .list-price-section {
@@ -288,7 +289,8 @@
             font-size: 14px;
         }
         
-        .input-group input {
+        .input-group input, .input-group textarea {
+            resize: vertical;
             width: 100%;
             padding: 8px;
             border: 1px solid #999;
@@ -310,6 +312,11 @@
         .btn-calculate:hover {
             background-color: #555;
         }
+
+        .desc-line {
+            margin: 0 0 2px 0; /* Pequeño margen inferior para separar líneas */
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -317,11 +324,15 @@
         <div class="input-section no-print">
             <div class="input-group">
                 <label for="productName">Nombre del Producto:</label>
-                <input type="text" id="productName" placeholder="KIT DE COCINA MONTESA 6P 2C 160.7X196X38.8CM">
+                <input type="text" id="productName" placeholder="Ej: PLACARD laredo">
             </div>
             <div class="input-group">
-                <label for="productCode">Código/Descripción adicional:</label>
-                <input type="text" id="productCode" placeholder="ART. 2907-8977-8905 FREJJOCRIS GUIAS TELESCOPICAS...">
+                <label for="productMeasures">Medidas:</label>
+                <input type="text" id="productMeasures" placeholder="Ej: 2.30x2.67x0.62">
+            </div>
+            <div class="input-group">
+                <label for="productCode">Descripción:</label>
+                <textarea id="productCode" placeholder="Ej: El armario doble Laredo tiene una estructura de mdp..." rows="12"></textarea>
             </div>
             <div class="input-group">
                 <label for="basePrice">Precio de Lista ($):</label>
@@ -397,6 +408,7 @@
 
         function calculateFinancing() {
             const productName = document.getElementById('productName').value || 'PRODUCTO';
+            const productMeasures = document.getElementById('productMeasures').value || '';
             const productCode = document.getElementById('productCode').value || '';
             const basePrice = parseFloat(document.getElementById('basePrice').value) || 0;
             
@@ -416,7 +428,21 @@
             document.getElementById('cashPrice').textContent = '$' + formatNumber(cashPrice);
             document.getElementById('listPrice').textContent = '$ ' + formatNumber(basePrice);
             document.getElementById('productNameDisplay').textContent = productName.toUpperCase();
-            document.getElementById('productCodeDisplay').innerHTML = (productCode ? productCode.toUpperCase() : '');
+            
+            let fullDescriptionHTML = '';
+
+            // Añadir medidas si existen
+            if (productMeasures && productMeasures.trim() !== '') {
+                fullDescriptionHTML += `<p class="desc-line">- ${productMeasures.trim().toUpperCase()}</p>`;
+            }
+
+            // Añadir líneas de descripción
+            const descriptionLines = productCode.split('\n').filter(line => line.trim() !== '');
+            descriptionLines.forEach(line => {
+                fullDescriptionHTML += `<p class="desc-line">- ${line.trim().toUpperCase()}</p>`;
+            });
+
+            document.getElementById('productCodeDisplay').innerHTML = fullDescriptionHTML;
 
             // 1. Planes para VALOR UNITARIO (con descuentos)
             const unitPlans = [
@@ -484,8 +510,17 @@
             document.getElementById('currentDate').textContent = `${day}/${month}/${year}`;
             
             // Load example data
-            document.getElementById('productName').value = 'KIT DE COCINA MONTESA';
-            document.getElementById('productCode').value = ' 6P 2C 160.7X196X38.8CM FREJJOCRIS GUIAS TELESCOPICAS PATAS AJUSTABLES VOL3';
+            document.getElementById('productName').value = 'PLACARD laredo';
+            document.getElementById('productMeasures').value = '2.30x2.67x0.62';
+            document.getElementById('productCode').value = `Estructura de mdp
+Acabado de pintura uv
+Cajones interiores con guías telescopicas
+Tiradores metálicos
+Perchas y zapatero metálicos
+Puertas correderas con doble riel metálico y marco metálico
+Puertas batientes con bisagras metálicas y tiradores metálicos
+Puertas batientes con aspecto de espejo o cristal reflectante
+Pies de pvc opcionales para proteger el mueble de la humedad`;
             document.getElementById('basePrice').value = '359999.90';
             calculateFinancing();
         };
