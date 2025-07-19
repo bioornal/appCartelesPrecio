@@ -177,6 +177,21 @@
             </div>
         </div>
 
+        <h2>Financiación 2x1</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Plan</th>
+                    <th>Cuotas</th>
+                    <th>Recargo</th>
+                    <th>Valor Cuota</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="financingTable2x1">
+            </tbody>
+        </table>
+
         <h2>Financiación Unidad</h2>
         <table>
             <thead>
@@ -189,21 +204,6 @@
                 </tr>
             </thead>
             <tbody id="financingTableUnit">
-            </tbody>
-        </table>
-
-        <h2>Financiación 2x1</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Plan</th>
-                    <th>Cuotas</th>
-                    <th>Descuento</th>
-                    <th>Valor Cuota</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody id="financingTable2x1">
             </tbody>
         </table>
     </div>
@@ -238,6 +238,14 @@
             document.getElementById('productInfo').innerHTML = productInfoHTML;
             document.getElementById('productCodeDisplay').innerHTML = productCode ? productCode.replace(/\n/g, '<br>') : '';
 
+            const twoForOnePlans = [
+                { name: 'Transferencia/Débito', payments: 1, surcharge: 5, total: basePrice * 1.05, monthly: basePrice * 1.05 },
+                { name: '1 Cuota', payments: 1, surcharge: 10, total: basePrice * 1.10, monthly: basePrice * 1.10 },
+                { name: '3 Cuotas', payments: 3, surcharge: 18, total: basePrice * 1.18, monthly: (basePrice * 1.18) / 3 },
+                { name: 'Plan Z', payments: 3, surcharge: 18, total: basePrice * 1.18, monthly: (basePrice * 1.18) / 3 },
+                { name: '6 Cuotas', payments: 6, surcharge: 25, total: basePrice * 1.25, monthly: (basePrice * 1.25) / 6 }
+            ];
+
             const unitPrice = basePrice * 0.6;
             const unitPlans = [
                 { name: 'Transferencia/Débito', payments: 1, surcharge: 5, total: unitPrice * 1.05, monthly: unitPrice * 1.05 },
@@ -245,14 +253,6 @@
                 { name: '3 Cuotas', payments: 3, surcharge: 18, total: unitPrice * 1.18, monthly: (unitPrice * 1.18) / 3 },
                 { name: 'Plan Z', payments: 3, surcharge: 18, total: unitPrice * 1.18, monthly: (unitPrice * 1.18) / 3 },
                 { name: '6 Cuotas', payments: 6, surcharge: 25, total: unitPrice * 1.25, monthly: (unitPrice * 1.25) / 6 }
-            ];
-
-            const twoForOnePlans = [
-                { name: 'Efectivo', payments: 1, discount: 40, total: basePrice * 0.6, monthly: basePrice * 0.6 },
-                { name: 'Transferencia/Débito', payments: 1, discount: 35, total: basePrice * 0.65, monthly: basePrice * 0.65 },
-                { name: '1 Cuota', payments: 1, discount: 30, total: basePrice * 0.70, monthly: basePrice * 0.70 },
-                { name: '3 Cuotas', payments: 3, discount: 20, total: basePrice * 0.80, monthly: (basePrice * 0.80) / 3 },
-                { name: '6 Cuotas', payments: 6, discount: 15, total: basePrice * 0.85, monthly: (basePrice * 0.85) / 6 }
             ];
 
             const tbodyUnit = document.getElementById('financingTableUnit');
