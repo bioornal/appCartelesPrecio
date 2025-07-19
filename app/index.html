@@ -365,7 +365,7 @@
                 <tr>
                     <th>PLAN</th>
                     <th>PAGOS</th>
-                    <th>DESCUENTO</th>
+                    <th>RECARGO</th>
                     <th>CUOTA</th>
                     <th>TOTAL</th>
                 </tr>
@@ -405,22 +405,22 @@
             document.getElementById('productInfo').innerHTML = productName.toUpperCase() + 
                 (productCode ? '<br>' + productCode.toUpperCase() : '');
 
-            // 1. Planes para VALOR UNITARIO (con descuentos)
+            // 1. Planes para VALOR UNITARIO (con recargos sobre precio unitario)
             const unitPlans = [
-                { name: 'Efectivo', payments: 1, discount: 40, total: precioUnitario, monthly: precioUnitario },
-                { name: 'Transferencia/Débito', payments: 1, discount: 35, total: debitPrice, monthly: debitPrice },
-                { name: '1 Cuota', payments: 1, discount: 30, total: oneInstallmentPrice, monthly: oneInstallmentPrice },
-                { name: '3 Cuotas', payments: 3, discount: 20, total: threeInstallmentPrice, monthly: threeInstallmentPrice / 3 },
-                { name: '6 Cuotas', payments: 6, discount: 15, total: sixInstallmentPrice, monthly: sixInstallmentPrice / 6 }
+                { name: 'Transferencia/Débito', payments: 1, surcharge: 5, total: precioUnitario * 1.05, monthly: precioUnitario * 1.05 },
+                { name: '1 Cuota', payments: 1, surcharge: 10, total: precioUnitario * 1.10, monthly: precioUnitario * 1.10 },
+                { name: '3 Cuotas', payments: 3, surcharge: 20, total: precioUnitario * 1.20, monthly: (precioUnitario * 1.20) / 3 },
+                { name: 'Plan Z', payments: 3, surcharge: 20, total: precioUnitario * 1.20, monthly: (precioUnitario * 1.20) / 3 },
+                { name: '6 Cuotas', payments: 6, surcharge: 35, total: precioUnitario * 1.35, monthly: (precioUnitario * 1.35) / 6 }
             ];
 
             // 2. Planes para VALOR 2x1 (con recargos sobre precio de lista)
             const twoForOnePlans = [
                 { name: 'Transferencia/Débito', payments: 1, surcharge: 5, total: precioDosxUno * 1.05, monthly: precioDosxUno * 1.05 },
                 { name: '1 Cuota', payments: 1, surcharge: 10, total: precioDosxUno * 1.10, monthly: precioDosxUno * 1.10 },
-                { name: '3 Cuotas', payments: 3, surcharge: 18, total: precioDosxUno * 1.18, monthly: (precioDosxUno * 1.18) / 3 },
-                { name: 'Plan Z', payments: 3, surcharge: 18, total: precioDosxUno * 1.18, monthly: (precioDosxUno * 1.18) / 3 },
-                { name: '6 Cuotas', payments: 6, surcharge: 25, total: precioDosxUno * 1.25, monthly: (precioDosxUno * 1.25) / 6 }
+                { name: '3 Cuotas', payments: 3, surcharge: 20, total: precioDosxUno * 1.20, monthly: (precioDosxUno * 1.20) / 3 },
+                { name: 'Plan Z', payments: 3, surcharge: 20, total: precioDosxUno * 1.20, monthly: (precioDosxUno * 1.20) / 3 },
+                { name: '6 Cuotas', payments: 6, surcharge: 35, total: precioDosxUno * 1.35, monthly: (precioDosxUno * 1.35) / 6 }
             ];
 
             // Poblar tabla de VALOR UNITARIO
@@ -431,7 +431,7 @@
                 row.innerHTML = `
                     <td>${plan.name}</td>
                     <td class="installments">${plan.payments}</td>
-                    <td class="discount-cell">-${plan.discount}%</td>
+                    <td class="discount-cell">+${plan.surcharge}%</td>
                     <td class="cuota-cell">$ ${formatNumber(plan.monthly)}</td>
                     <td class="total-cell">$ ${formatNumber(plan.total)}</td>
                 `;
