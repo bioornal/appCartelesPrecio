@@ -3,48 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de 4 Carteles de Oferta por Hoja - Muebles Online</title>
+    <title>Generador de Carteles de Oferta - Muebles Online</title>
     <style>
         /* Estilos para la interfaz de usuario (no se imprimen) */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 20px;
             background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
         }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
+        .main-container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .controls-section {
+            width: 400px;
+            flex-shrink: 0;
+        }
+        .preview-section {
+            flex-grow: 1;
+        }
+        .card {
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        .main-controls {
             padding: 25px;
-            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
         }
-        .main-controls h2 {
+        .card h2, .card h3 {
             margin-top: 0;
             margin-bottom: 20px;
-            font-size: 24px;
+            font-size: 22px;
             color: #333;
-        }
-        #forms-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            padding: 25px;
-        }
-        .product-form {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            background-color: #fdfdfd;
-        }
-        .product-form h3 {
-            margin-top: 0;
-            margin-bottom: 15px;
-            color: #007bff;
         }
         .input-group {
             margin-bottom: 15px;
@@ -58,21 +51,16 @@
         }
         .input-group input, .input-group textarea {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ddd;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 16px;
             box-sizing: border-box;
             transition: border-color 0.2s;
         }
         .input-group input:focus, .input-group textarea:focus {
             outline: none;
             border-color: #007bff;
-        }
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
         }
         .btn {
             background-color: #007bff;
@@ -85,113 +73,126 @@
             cursor: pointer;
             border-radius: 6px;
             transition: background-color 0.3s;
+            display: block;
+            text-align: center;
         }
         .btn:hover {
             background-color: #0056b3;
         }
         .btn-print {
             background-color: #28a745;
+            margin-top: 10px;
         }
         .btn-print:hover {
             background-color: #1e7e34;
         }
-        .poster-preview-container {
-            padding: 25px;
-            background-color: #f9f9f9;
-            border-top: 1px solid #eee;
+        #product-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
-        .poster-preview-container h3 {
-            margin-top: 0;
-            margin-bottom: 15px;
-            color: #333;
+        #product-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        #product-list li:last-child {
+            border-bottom: none;
+        }
+        #product-list .product-info {
+            font-size: 14px;
+        }
+        #product-list .product-name-list {
+            font-weight: bold;
+        }
+        #product-list .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
         }
         #poster-preview {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 15px;
-            border: 1px solid #ccc;
-            background-color: #fff;
+            background-color: #e9ecef;
             padding: 15px;
-            min-height: 600px;
+            border-radius: 8px;
+            min-height: 400px;
         }
 
-        /* Estilos base para el cartel */
+        /* Estilos para el cartel (diseño base para PREVISUALIZACIÓN) */
         .poster-content {
-            border: 2px solid #000;
-            width: 100%;
-            height: 100%;
+            border: 4px solid #000;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
             text-align: center;
             background: #fff;
-            padding: 8px;
+            padding: 10px; /* Reducido para dar más espacio */
             box-sizing: border-box;
-            overflow: hidden; /* Para evitar desbordamientos */
-        }
-        .poster-content.empty {
-            background-color: #f0f0f0;
-            border-style: dashed;
+            aspect-ratio: 1 / 1.41;
+            overflow: hidden; /* Previene el desbordamiento */
         }
         .poster-content .logo {
-            max-width: 60px;
+            max-width: 100px; /* Reducido */
             margin: 0 auto 5px auto;
         }
         .poster-content .product-name {
-            font-size: 16px;
+            font-size: 26px; /* Reducido */
             font-weight: 900;
             text-transform: uppercase;
             margin: 5px 0;
             line-height: 1.1;
         }
         .poster-content .product-description {
-            font-size: 8px;
+            font-size: 14px; /* Reducido */
             color: #000;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
         .poster-content .price-area {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
+            gap: 10px; /* Reducido */
             padding: 5px 0;
             width: 100%;
             box-sizing: border-box;
             flex-wrap: wrap;
         }
         .poster-content .price-box {
-            padding: 2px 5px;
+            padding: 5px;
         }
         .poster-content .price-box .label {
-            font-size: 12px;
+            font-size: 22px; /* Reducido */
             font-weight: bold;
-            color: #000;
         }
         .poster-content .price-box .price-value {
-            font-size: 22px;
+            font-size: 42px; /* Reducido */
             font-weight: bold;
-            color: #000;
             text-decoration: line-through;
-            text-decoration-thickness: 1px;
+            text-decoration-thickness: 2px;
         }
         .poster-content .offer-price-box {
-            border: 3px dashed #000;
-            padding: 8px;
+            border: 4px dashed #000; /* Reducido */
+            padding: 10px;
         }
         .poster-content .offer-price-box .label {
-            font-size: 16px;
-            color: #000;
+            font-size: 30px; /* Reducido */
             font-weight: 900;
         }
         .poster-content .offer-price-box .price-value {
-            font-size: 40px;
-            color: #000;
+            font-size: 75px; /* Reducido */
             text-decoration: none;
             line-height: 1;
         }
         .poster-content .discount-badge {
-            width: 60px;
-            height: 60px;
+            width: 100px; /* Reducido */
+            height: 100px; /* Reducido */
             background-color: #000;
             color: #fff;
             border-radius: 50%;
@@ -206,20 +207,20 @@
             line-height: 1;
         }
         .poster-content .discount-badge .percentage {
-            font-size: 22px;
+            font-size: 38px; /* Reducido */
             display: block;
         }
         .poster-content .discount-badge .off-text {
-            font-size: 12px;
+            font-size: 22px; /* Reducido */
             display: block;
         }
 
-        /* Contenedor de impresión real, oculto por defecto */
+        /* Contenedor de impresión, oculto por defecto */
         .print-container {
             display: none;
         }
 
-        /* Media Query para configurar la impresión final */
+        /* Media Query para la impresión */
         @media print {
             body, html {
                 margin: 0;
@@ -230,78 +231,101 @@
                 display: none !important;
             }
             .print-container {
-                display: grid !important;
+                display: block !important;
+            }
+            .print-page {
+                width: 210mm;
+                height: 297mm;
+                page-break-after: always;
+                box-sizing: border-box;
+                padding: 8mm; /* Margen reducido para más espacio */
+                display: grid;
                 grid-template-columns: 1fr 1fr;
                 grid-template-rows: 1fr 1fr;
-                width: 210mm;  /* Ancho A4 */
-                height: 297mm; /* Alto A4 */
-                box-sizing: border-box;
-                padding: 5mm; /* Margen de la impresora */
-                gap: 5mm;
+                gap: 8mm; /* Espacio reducido */
             }
-            /* Asegurarse de que el contenido del cartel no se rompa entre páginas */
-            .poster-content {
-                page-break-inside: avoid;
+            /* APLICAMOS ESTILOS ESPECÍFICOS Y MÁS GRANDES PARA LA IMPRESIÓN */
+            .print-page .poster-content {
+                border-width: 3px;
+                padding: 8px;
+                -webkit-print-color-adjust: exact; /* Fuerza la impresión de colores de fondo */
+                print-color-adjust: exact;
             }
+            .print-page .poster-content .logo { max-width: 80px; }
+            .print-page .poster-content .product-name { font-size: 22px; }
+            .print-page .poster-content .product-description { font-size: 12px; }
+            .print-page .poster-content .price-box .label { font-size: 20px; }
+            .print-page .poster-content .price-box .price-value { font-size: 38px; }
+            .print-page .poster-content .offer-price-box { border-width: 4px; padding: 8px; }
+            .print-page .poster-content .offer-price-box .label { font-size: 28px; }
+            .print-page .poster-content .offer-price-box .price-value { font-size: 65px; }
+            .print-page .poster-content .discount-badge { width: 90px; height: 90px; }
+            .print-page .poster-content .discount-badge .percentage { font-size: 34px; }
+            .print-page .poster-content .discount-badge .off-text { font-size: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container no-print">
-        <div class="main-controls">
-            <h2>Generador de Carteles (4 por página)</h2>
-            <div class="button-group">
-                <button class="btn" onclick="updateAllPosters()">Actualizar Carteles</button>
-                <button class="btn btn-print" onclick="window.print()">Imprimir</button>
+    <div class="main-container no-print">
+        <div class="controls-section">
+            <div class="card">
+                <h2>Añadir Producto</h2>
+                <form id="product-form">
+                    <div class="input-group">
+                        <label for="productName">Nombre del Producto:</label>
+                        <input type="text" id="productName" placeholder="Ej: PLACARD LAREDO" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="productMeasures">Medidas:</label>
+                        <input type="text" id="productMeasures" placeholder="Ej: 1.80x2.20x0.60M">
+                    </div>
+                    <div class="input-group">
+                        <label for="productCode">Descripción/Código:</label>
+                        <textarea id="productCode" placeholder="Ej: ART. 2907-8977" rows="2"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="finalPrice">Precio de Venta Final ($):</label>
+                        <input type="number" id="finalPrice" placeholder="199999.99" step="0.01" required>
+                    </div>
+                    <button type="submit" class="btn">Añadir Producto a la Lista</button>
+                </form>
+            </div>
+            <div class="card">
+                <h3>Lista de Impresión</h3>
+                <div id="product-list">
+                    <ul><!-- La lista de productos se añadirá aquí --></ul>
+                    <p id="empty-list-msg">Aún no has añadido ningún producto.</p>
+                </div>
+                <button class="btn btn-print" onclick="printPosters()">Imprimir Todos los Carteles</button>
             </div>
         </div>
-        <div id="forms-container">
-            <!-- Los 4 formularios se generarán aquí con JS -->
-        </div>
-        <div class="poster-preview-container">
-            <h3>Previsualización de Impresión (Hoja A4):</h3>
-            <div id="poster-preview">
-                <!-- La previsualización de los 4 carteles se inyectará aquí -->
+        <div class="preview-section">
+            <div class="card">
+                <h3>Previsualización de Carteles</h3>
+                <div id="poster-preview">
+                    <!-- La previsualización de los carteles se inyectará aquí -->
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Contenido real que se enviará a la impresora -->
-    <div class="print-container" id="poster-for-print">
-        <!-- El contenido de los 4 carteles se inyectará aquí desde el script -->
-    </div>
+    <div class="print-container" id="print-area"></div>
 
     <script>
-        const NUM_POSTERS = 4;
+        let products = [];
 
-        function createForms() {
-            const container = document.getElementById('forms-container');
-            for (let i = 1; i <= NUM_POSTERS; i++) {
-                const formHTML = `
-                    <div class="product-form" id="form-${i}">
-                        <h3>Producto ${i}</h3>
-                        <div class="input-group">
-                            <label for="productName-${i}">Nombre del Producto:</label>
-                            <input type="text" id="productName-${i}" placeholder="Ej: PLACARD LAREDO">
-                        </div>
-                        <div class="input-group">
-                            <label for="productMeasures-${i}">Medidas:</label>
-                            <input type="text" id="productMeasures-${i}" placeholder="Ej: 1.80x2.20x0.60M">
-                        </div>
-                        <div class="input-group">
-                            <label for="productCode-${i}">Descripción/Código:</label>
-                            <textarea id="productCode-${i}" placeholder="Ej: ART. 2907-8977" rows="1"></textarea>
-                        </div>
-                        <div class="input-group">
-                            <label for="finalPrice-${i}">Precio de Venta Final ($):</label>
-                            <input type="number" id="finalPrice-${i}" placeholder="199999.99" step="0.01">
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += formHTML;
-            }
-        }
+        const productForm = document.getElementById('product-form');
+        const productListUl = document.querySelector('#product-list ul');
+        const emptyListMsg = document.getElementById('empty-list-msg');
+        const posterPreview = document.getElementById('poster-preview');
+        const printArea = document.getElementById('print-area');
+
+        productForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            addProduct();
+        });
 
         function roundToNearestHundred(num) {
             return Math.round(num / 100) * 100;
@@ -314,95 +338,142 @@
             }).replace(/,/g, '.');
         }
 
-        function updateAllPosters() {
-            let allPostersHTML = '';
+        function addProduct() {
+            const productName = document.getElementById('productName').value;
+            const productMeasures = document.getElementById('productMeasures').value;
+            const productCode = document.getElementById('productCode').value;
+            const finalPriceInput = parseFloat(document.getElementById('finalPrice').value);
 
-            for (let i = 1; i <= NUM_POSTERS; i++) {
-                const productName = document.getElementById(`productName-${i}`).value;
-                
-                if (!productName.trim()) {
-                    // Si no hay nombre de producto, agregar un cartel vacío
-                    allPostersHTML += '<div class="poster-content empty"></div>';
-                    continue;
-                }
-
-                const productMeasures = document.getElementById(`productMeasures-${i}`).value || '';
-                const productCode = document.getElementById(`productCode-${i}`).value || '';
-                const finalPriceInput = parseFloat(document.getElementById(`finalPrice-${i}`).value) || 0;
-
-                if (finalPriceInput <= 0) {
-                    alert(`Por favor, ingrese un precio de venta válido para el Producto ${i}.`);
-                    // Agregar un cartel vacío si el precio es inválido
-                    allPostersHTML += '<div class="poster-content empty"></div>';
-                    continue;
-                }
-
-                const finalPrice = roundToNearestHundred(finalPriceInput);
-                const listPrice = roundToNearestHundred(finalPrice / 0.85);
-                const discountPercentage = 15;
-
-                let description = productMeasures;
-                if (productCode) {
-                    description += (description ? ' - ' : '') + productCode;
-                }
-
-                const posterHTML = `
-                    <div class="poster-content">
-                        <div class="print-header">
-                            <img src="https://res.cloudinary.com/djtvjkcu6/image/upload/v1751206020/MegaMuebles/logoRedondo_f7kulu.png" alt="Logo" class="logo">
-                        </div>
-                        <div class="product-info">
-                            <h1 class="product-name">${productName.toUpperCase()}</h1>
-                            <p class="product-description">${description}</p>
-                        </div>
-                        <div class="price-area">
-                            <div class="price-box">
-                                <span class="label">ANTES</span>
-                                <div class="price-value">${formatNumber(listPrice)}</div>
-                            </div>
-                            <div class="discount-badge">
-                                <div class="discount-badge-content">
-                                    <span class="percentage">${discountPercentage}%</span>
-                                    <span class="off-text">OFF</span>
-                                </div>
-                            </div>
-                            <div class="price-box offer-price-box">
-                                <span class="label">¡OFERTA!</span>
-                                <div class="price-value">${formatNumber(finalPrice)}</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                allPostersHTML += posterHTML;
+            if (!productName || finalPriceInput <= 0) {
+                alert('El nombre del producto y un precio válido son obligatorios.');
+                return;
             }
 
-            // Actualizar tanto la previsualización como el contenedor de impresión
-            document.getElementById('poster-preview').innerHTML = allPostersHTML;
-            document.getElementById('poster-for-print').innerHTML = allPostersHTML;
+            const product = {
+                id: Date.now(), // ID único para el producto
+                name: productName,
+                measures: productMeasures,
+                code: productCode,
+                price: finalPriceInput
+            };
+
+            products.push(product);
+            productForm.reset();
+            document.getElementById('productName').focus();
+            
+            renderUI();
         }
 
-        // Cargar datos de ejemplo al iniciar
-        window.onload = function() {
-            createForms(); // Crear los 4 formularios dinámicamente
+        function removeProduct(id) {
+            products = products.filter(p => p.id !== id);
+            renderUI();
+        }
 
-            // Llenar el primer formulario con datos de ejemplo
-            document.getElementById('productName-1').value = 'KIT DE COCINA MONTESA';
-            document.getElementById('productMeasures-1').value = '1.60x1.96x0.38M';
-            document.getElementById('productCode-1').value = 'ART. 2907-8977';
-            document.getElementById('finalPrice-1').value = '215999';
-            
-            // Añadir listeners para la tecla Enter en todos los campos de precio
-            for (let i = 1; i <= NUM_POSTERS; i++) {
-                document.getElementById(`finalPrice-${i}`).addEventListener('keypress', function(event) {
-                    if (event.key === 'Enter') {
-                        updateAllPosters();
-                        event.preventDefault();
-                    }
-                });
+        function createPosterHTML(product) {
+            const finalPrice = roundToNearestHundred(product.price);
+            const listPrice = roundToNearestHundred(finalPrice / 0.90); // Descuento del 10%
+            const discountPercentage = 10;
+
+            let description = product.measures;
+            if (product.code) {
+                description += (description ? ' - ' : '') + product.code;
             }
 
-            updateAllPosters(); // Actualizar todos los carteles al cargar
+            return `
+                <div class="poster-content">
+                    <img src="https://res.cloudinary.com/djtvjkcu6/image/upload/v1751206020/MegaMuebles/logoRedondo_f7kulu.png" alt="Logo" class="logo">
+                    <h1 class="product-name">${product.name.toUpperCase()}</h1>
+                    <p class="product-description">${description}</p>
+                    <div class="price-area">
+                        <div class="price-box">
+                            <span class="label">ANTES</span>
+                            <div class="price-value">${formatNumber(listPrice)}</div>
+                        </div>
+                        <div class="discount-badge">
+                            <div class="discount-badge-content">
+                                <span class="percentage">${discountPercentage}%</span>
+                                <span class="off-text">OFF</span>
+                            </div>
+                        </div>
+                        <div class="price-box offer-price-box">
+                            <span class="label">PAGO EFECTIVO!</span>
+                            <div class="price-value">${formatNumber(finalPrice)}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderUI() {
+            // Limpiar todo
+            productListUl.innerHTML = '';
+            posterPreview.innerHTML = '';
+
+            // Actualizar mensaje de lista vacía
+            emptyListMsg.style.display = products.length === 0 ? 'block' : 'none';
+
+            // Renderizar lista y previsualización
+            products.forEach((product, index) => {
+                // Añadir a la lista
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="product-info">
+                        <span class="product-name-list">${index + 1}. ${product.name}</span><br>
+                        <span>${formatNumber(product.price)}</span>
+                    </div>
+                    <button class="remove-btn" onclick="removeProduct(${product.id})">Quitar</button>
+                `;
+                productListUl.appendChild(listItem);
+
+                // Añadir a la previsualización
+                const previewItem = document.createElement('div');
+                previewItem.innerHTML = createPosterHTML(product);
+                posterPreview.appendChild(previewItem);
+            });
+        }
+
+        function printPosters() {
+            if (products.length === 0) {
+                alert("No hay productos en la lista para imprimir.");
+                return;
+            }
+
+            printArea.innerHTML = '';
+            let pageContent = '';
+            
+            products.forEach((product, index) => {
+                if (index % 4 === 0) {
+                    pageContent += `<div class="print-page">`;
+                }
+
+                pageContent += createPosterHTML(product);
+
+                if ((index + 1) % 4 === 0 || (index + 1) === products.length) {
+                    pageContent += `</div>`;
+                }
+            });
+
+            printArea.innerHTML = pageContent;
+            window.print();
+        }
+
+        // Cargar datos de ejemplo para demostración inicial
+        window.onload = function() {
+            addProductToList({
+                id: Date.now(),
+                name: 'KIT DE COCINA MONTESA',
+                measures: '1.60x1.96x0.38M',
+                code: 'ART. 2907-8977',
+                price: 215999
+            });
+            renderUI();
+            document.getElementById('productName').focus();
         };
+
+        function addProductToList(product) {
+            products.push(product);
+        }
+
     </script>
 </body>
 </html>
