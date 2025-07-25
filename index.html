@@ -3,430 +3,341 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Financiación - Muebles Online</title>
+    <title>Generador de Carteles de Oferta - Muebles Online</title>
     <style>
-        @media print {
-            @page {
-                size: A4;
-                margin: 5mm;
-            }
-            body {
-                margin: 0;
-                padding: 0;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            .container {
-                width: 100%;
-                max-width: none;
-                box-shadow: none !important;
-                border: 1px solid #000 !important;
-                padding: 10px;
-                margin: 0 auto;
-            }
-            .no-print {
-                display: none !important;
-            }
-            .header, .price-section, .list-price-section, .financing-header {
-                padding: 3px 8px;
-                margin-bottom: 5px;
-            }
-            .cash-price { font-size: 42px; }
-            .list-price { font-size: 24px; }
-            .product-name { font-size: 14px; font-weight: bold; padding: 5px; border-bottom: 1px solid #000; }
-            .product-description { font-size: 10px; line-height: 1.2; text-align: justify; }
-            .financing-header { font-size: 14px; letter-spacing: 3px; padding: 2px; margin-top: 10px; }
-            table {
-                font-size: 9px;
-                width: 100%;
-                margin-top: 5px;
-            }
-            th, td {
-                padding: 3px;
-                font-size: 8px;
-            }
-            .installments { font-size: 24px; }
-            .discount-cell { font-size: 16px; }
-            .logo {
-                width: 70px;
-                height: 70px;
-            }
-            .discount-percent { font-size: 32px; }
-            .discount-text { font-size: 9px; }
-        }
+        /* Estilos para la interfaz de usuario (no se imprimen) */
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 20px;
-            background-color: #f0f0f0;
+            background-color: #f4f6f9;
         }
         .container {
-            max-width: 500px;
+            max-width: 600px;
             margin: 0 auto;
-            background-color: white;
-            border: 2px solid #000;
-            padding: 0;
-        }
-        .header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-            padding: 10px 15px;
-            border-bottom: 2px solid #000;
-        }
-        .logo-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-        .logo {
-            width: 160px;
-            height: 160px;
-        }
-        .logo img {
-            width: 100%;
-            height: auto;
-            border-radius: 50%;
-        }
-        .date-display {
-            font-size: 12px;
-            color: #333;
-        }
-        .discount-section {
-            text-align: center;
-            border: 2px solid #000;
-            padding: 10px 20px;
-            background-color: white;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .discount-percent {
-            font-size: 48px;
-            font-weight: bold;
-            margin: 0;
-            line-height: 1;
-        }
-        .discount-text {
-            font-size: 14px;
-            margin: 0;
-            line-height: 1.3;
-            font-weight: bold;
-            text-align: left;
-        }
-        .price-section {
-            text-align: center;
-            padding: 15px;
-            border-bottom: 2px solid #000;
-        }
-        .cash-price {
-            font-size: 36px;
-            font-weight: normal;
-            color: #4a4a4a;
-            margin: 10px 0;
-        }
-        .product-name {
-            font-size: 22px;
-            font-weight: bold;
-            text-transform: uppercase;
-            text-align: center;
-            padding: 10px;
-        }
-        .product-description {
-            font-size: 16px;
-            line-height: 1.3;
-            color: #4a4a4a;
-            margin-top: 5px;
-            text-align: justify;
-        }
-        .list-price-section {
-            margin: 20px 0 0 0;
-        }
-        .list-price-split {
-            display: flex;
-            flex-direction: row;
-            align-items: stretch;
-            width: 100%;
+            background-color: #fff;
             border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             overflow: hidden;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-        }
-        .list-price {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 62px;
-            font-weight: bold;
-            background: #f5f5f5;
-            color: #222;
-            height: 80px;
-        }
-        .financing-header {
-            background-color: white;
-            text-align: center;
-            padding: 8px;
-            font-size: 20px;
-            letter-spacing: 8px;
-            font-weight: bold;
-            border-bottom: 2px solid #000;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th {
-            border: 1px solid #000;
-            padding: 5px;
-            font-size: 12px;
-            font-weight: bold;
-            background-color: #f0f0f0;
-        }
-        td {
-            border: 1px solid #000;
-            padding: 8px 5px;
-            text-align: center;
-            font-size: 14px;
-        }
-        .installments {
-            font-size: 40px;
-            font-weight: bold;
-        }
-        .discount-cell {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .cuota-cell,
-        .total-cell {
-            font-size: 12px;
-            font-weight: bold;
         }
         .input-section {
-            padding: 20px;
-            background-color: #f5f5f5;
-            border-bottom: 2px solid #000;
+            padding: 25px;
+        }
+        .input-section h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
         }
         .input-group {
-            margin: 10px 0;
+            margin-bottom: 15px;
         }
         .input-group label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 6px;
+            font-weight: 600;
             font-size: 14px;
+            color: #555;
         }
         .input-group input, .input-group textarea {
-            resize: vertical;
             width: 100%;
-            padding: 8px;
-            border: 1px solid #999;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
             font-size: 16px;
             box-sizing: border-box;
+            transition: border-color 0.2s;
         }
-        .btn-calculate {
-            background-color: #333;
+        .input-group input:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn {
+            background-color: #007bff;
             color: white;
             padding: 12px;
             border: none;
             width: 100%;
             font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            margin-top: 10px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
         }
-        .btn-calculate:hover {
-            background-color: #555;
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-print {
+            background-color: #28a745;
+        }
+        .btn-print:hover {
+            background-color: #1e7e34;
+        }
+        .poster-preview-container {
+            padding: 25px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #eee;
+        }
+        .poster-preview-container h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        #poster-preview {
+            border: 1px solid #ccc;
+            background-color: #fff;
+            min-height: 450px;
+        }
+
+        /* Estilos para el cartel (aplican a la previsualización y a la impresión) */
+        .poster-content {
+            border: 4px solid #000;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            text-align: center;
+            background: #fff;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+        .poster-content .logo {
+            max-width: 130px;
+            margin: 0 auto 10px auto;
+        }
+        .poster-content .product-name {
+            font-size: 30px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin: 10px 0;
+            line-height: 1.2;
+        }
+        .poster-content .product-description {
+            font-size: 16px;
+            color: #000;
+            margin-bottom: 15px;
+        }
+        .poster-content .price-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+            flex-wrap: wrap;
+        }
+        .poster-content .price-box {
+            padding: 5px 10px;
+        }
+        .poster-content .price-box .label {
+            font-size: 26px;
+            font-weight: bold;
+            color: #000;
+        }
+        .poster-content .price-box .price-value {
+            font-size: 48px;
+            font-weight: bold;
+            color: #000;
+            text-decoration: line-through;
+            text-decoration-thickness: 3px;
+        }
+        .poster-content .offer-price-box {
+            border: 5px dashed #000;
+            padding: 15px;
+        }
+        .poster-content .offer-price-box .label {
+            font-size: 36px;
+            color: #000;
+            font-weight: 900;
+        }
+        .poster-content .offer-price-box .price-value {
+            font-size: 90px;
+            color: #000;
+            text-decoration: none;
+            line-height: 1;
+        }
+        .poster-content .discount-badge {
+            width: 130px;
+            height: 130px;
+            background-color: #000;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .poster-content .discount-badge-content {
+            font-weight: 900;
+            line-height: 1;
+        }
+        .poster-content .discount-badge .percentage {
+            font-size: 44px;
+            display: block;
+        }
+        .poster-content .discount-badge .off-text {
+            font-size: 26px;
+            display: block;
+        }
+
+        /* Contenedor de impresión real, oculto por defecto */
+        .print-container {
+            display: none;
+        }
+
+        /* Media Query para configurar la impresión final */
+        @media print {
+            body, html {
+                margin: 0;
+                padding: 0;
+                background: #fff;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-container {
+                display: block !important; /* Se muestra solo al imprimir */
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="input-section no-print">
+
+    <div class="container no-print">
+        <div class="input-section">
+            <h2>Generador de Carteles</h2>
             <div class="input-group">
                 <label for="productName">Nombre del Producto:</label>
-                <input type="text" id="productName" placeholder="Ej: PLACARD laredo">
+                <input type="text" id="productName" placeholder="Ej: PLACARD LAREDO">
             </div>
             <div class="input-group">
                 <label for="productMeasures">Medidas:</label>
-                <input type="text" id="productMeasures" placeholder="Ej: 160.7x196x38.8CM">
+                <input type="text" id="productMeasures" placeholder="Ej: 1.80x2.20x0.60M">
             </div>
             <div class="input-group">
                 <label for="productCode">Descripción/Código:</label>
-                <textarea id="productCode" placeholder="Ej: ART. 2907-8977-8905..." rows="3"></textarea>
+                <textarea id="productCode" placeholder="Ej: ART. 2907-8977" rows="2"></textarea>
             </div>
             <div class="input-group">
-                <label for="basePrice">Precio de Lista ($):</label>
-                <input type="number" id="basePrice" placeholder="359999.90" step="0.01">
+                <label for="finalPrice">Precio de Venta Final ($):</label>
+                <input type="number" id="finalPrice" placeholder="199999.99" step="0.01">
             </div>
-            <button class="btn-calculate" onclick="calculateFinancing()">Calcular Financiación</button>
-        </div>
-        
-        <div class="header">
-            <div class="logo-section">
-                <div class="logo">
-                    <img src="https://res.cloudinary.com/djtvjkcu6/image/upload/v1751206020/MegaMuebles/logoRedondo_f7kulu.png" alt="Logo de la empresa">
-                </div>
-                <span class="date-display" id="currentDate"></span>
-            </div>
-            <div class="discount-section">
-                <p class="discount-percent">-40%</p>
-                <p class="discount-text">DESCUENTO<br>CONTADO<br>VALOR UNITARIO</p>
+            <div class="button-group">
+                <button class="btn" onclick="updatePoster()">Actualizar Cartel</button>
+                <button class="btn btn-print" onclick="window.print()">Imprimir</button>
             </div>
         </div>
-        
-        <div class="price-section">
-            <div class="cash-price" id="cashPrice"></div>
-            <div class="product-name" id="productInfo"></div>
-            <div class="product-description" id="productCodeDisplay"></div>
-        </div>
-        
-        <div class="list-price-section">
-            <div class="list-price-split">
-                <div class="list-price" id="listPrice"></div>
+        <div class="poster-preview-container">
+            <h3>Previsualización de Impresión:</h3>
+            <div id="poster-preview">
+                <!-- La previsualización del cartel se inyectará aquí -->
             </div>
         </div>
-        
-        <div class="financing-header">
-            <h2>Financiación 2x1</h2>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Plan</th>
-                    <th>Cuotas</th>
-                    <th>Recargo</th>
-                    <th>Valor Cuota</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody id="financingTable2x1">
-            </tbody>
-        </table>
+    </div>
 
-        <div class="financing-header">
-            <h2>Financiación Unidad</h2>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Plan</th>
-                    <th>Cuotas</th>
-                    <th>Recargo</th>
-                    <th>Valor Cuota</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody id="financingTableUnit">
-            </tbody>
-        </table>
+    <!-- Contenido real que se enviará a la impresora -->
+    <div class="print-container" id="poster-for-print">
+        <!-- El contenido del cartel se inyectará aquí desde el script -->
     </div>
 
     <script>
+        function roundToNearestHundred(num) {
+            return Math.round(num / 100) * 100;
+        }
+
         function formatNumber(num) {
-            return Math.round(num).toLocaleString('es-AR', {
+            return '$' + num.toLocaleString('es-AR', {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
             }).replace(/,/g, '.');
         }
 
-        function calculateFinancing() {
+        function updatePoster() {
             const productName = document.getElementById('productName').value || 'PRODUCTO';
             const productMeasures = document.getElementById('productMeasures').value || '';
             const productCode = document.getElementById('productCode').value || '';
-            const basePrice = parseFloat(document.getElementById('basePrice').value) || 0;
+            const finalPriceInput = parseFloat(document.getElementById('finalPrice').value) || 0;
 
-            if (basePrice <= 0) {
-                alert('Por favor ingrese un precio válido');
+            if (finalPriceInput <= 0) {
+                alert('Por favor, ingrese un precio de venta válido.');
                 return;
             }
 
-            const cashPrice = basePrice * 0.6;
-            const debitPrice = basePrice * 0.65;
-            const oneInstallmentPrice = basePrice * 0.7;
-            const threeInstallmentPrice = basePrice * 0.8;
-            const sixInstallmentPrice = basePrice * 0.85;
+            // Redondear el precio final a la centena más cercana.
+            const finalPrice = roundToNearestHundred(finalPriceInput);
+            
+            // Calcular el precio de lista para que el precio final sea un 15% de descuento.
+            // Formula: listPrice * (1 - 0.15) = finalPrice  =>  listPrice = finalPrice / 0.85
+            const listPrice = roundToNearestHundred(finalPrice / 0.85);
+            
+            // El descuento ahora es un 15% fijo.
+            const discountPercentage = 15;
 
-            document.getElementById('cashPrice').textContent = '$' + formatNumber(cashPrice);
-            document.getElementById('listPrice').textContent = '$ ' + formatNumber(basePrice);
-
-            let productInfoHTML = productName.toUpperCase();
-            if (productMeasures) {
-                productInfoHTML += ` (${productMeasures})`;
+            let description = productMeasures;
+            if (productCode) {
+                description += (description ? ' - ' : '') + productCode;
             }
-            document.getElementById('productInfo').innerHTML = productInfoHTML;
-            document.getElementById('productCodeDisplay').innerHTML = productCode ? productCode.replace(/\n/g, '<br>') : '';
 
-            // Los planes con recargo se basan en el precio unitario (60% del precio de lista)
-            const twoForOnePlans = [
-                { name: 'Transferencia/Débito', payments: 1, surcharge: 5, total: basePrice * 1.05, monthly: basePrice * 1.05 },
-                { name: '1 Cuota', payments: 1, surcharge: 10, total: basePrice * 1.10, monthly: basePrice * 1.10 },
-                { name: '3 Cuotas', payments: 3, surcharge: 18, total: basePrice * 1.18, monthly: (basePrice * 1.18) / 3 },
-                { name: 'Plan Z', payments: 3, surcharge: 18, total: basePrice * 1.18, monthly: (basePrice * 1.18) / 3 },
-                { name: '6 Cuotas', payments: 6, surcharge: 25, total: basePrice * 1.25, monthly: (basePrice * 1.25) / 6 }
-            ];
+            const posterHTML = `
+                <div class="poster-content">
+                    <div class="print-header">
+                        <img src="https://res.cloudinary.com/djtvjkcu6/image/upload/v1751206020/MegaMuebles/logoRedondo_f7kulu.png" alt="Logo" class="logo">
+                    </div>
+                    <div class="product-info">
+                        <h1 class="product-name">${productName.toUpperCase()}</h1>
+                        <p class="product-description">${description}</p>
+                    </div>
+                    <div class="price-area">
+                        <div class="price-box">
+                            <span class="label">ANTES</span>
+                            <div class="price-value">${formatNumber(listPrice)}</div>
+                        </div>
+                        <div class="discount-badge">
+                            <div class="discount-badge-content">
+                                <span class="percentage">${discountPercentage}%</span>
+                                <span class="off-text">OFF</span>
+                            </div>
+                        </div>
+                        <div class="price-box offer-price-box">
+                            <span class="label">¡OFERTA!</span>
+                            <div class="price-value">${formatNumber(finalPrice)}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
 
-            const unitPrice = basePrice * 0.6;
-            const unitPlans = [
-                { name: 'Transferencia/Débito', payments: 1, surcharge: 5, total: unitPrice * 1.05, monthly: unitPrice * 1.05 },
-                { name: '1 Cuota', payments: 1, surcharge: 10, total: unitPrice * 1.10, monthly: unitPrice * 1.10 },
-                { name: '3 Cuotas', payments: 3, surcharge: 18, total: unitPrice * 1.18, monthly: (unitPrice * 1.18) / 3 },
-                { name: 'Plan Z', payments: 3, surcharge: 18, total: unitPrice * 1.18, monthly: (unitPrice * 1.18) / 3 },
-                { name: '6 Cuotas', payments: 6, surcharge: 25, total: unitPrice * 1.25, monthly: (unitPrice * 1.25) / 6 }
-            ];
-
-            // Poblar tabla de VALOR 2x1 (con recargos)
-            const tbody2x1 = document.getElementById('financingTable2x1');
-            tbody2x1.innerHTML = '';
-            twoForOnePlans.forEach(plan => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${plan.name}</td>
-                    <td class="installments">${plan.payments}</td>
-                    <td class="discount-cell">+${plan.surcharge}%</td>
-                    <td class="cuota-cell">$ ${formatNumber(plan.monthly)}</td>
-                    <td class="total-cell">$ ${formatNumber(plan.total)}</td>
-                `;
-                tbody2x1.appendChild(row);
-            });
-
-            // Poblar tabla de VALOR UNITARIO (con recargos)
-            const tbodyUnit = document.getElementById('financingTableUnit');
-            tbodyUnit.innerHTML = '';
-            unitPlans.forEach(plan => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${plan.name}</td>
-                    <td class="installments">${plan.payments}</td>
-                    <td class="discount-cell">+${plan.surcharge}%</td>
-                    <td class="cuota-cell">$ ${formatNumber(plan.monthly)}</td>
-                    <td class="total-cell">$ ${formatNumber(plan.total)}</td>
-                `;
-                tbodyUnit.appendChild(row);
-            });
+            // Actualizar tanto la previsualización como el contenedor de impresión
+            document.getElementById('poster-preview').innerHTML = posterHTML;
+            document.getElementById('poster-for-print').innerHTML = posterHTML;
         }
 
-        // Allow Enter key to calculate
-        document.getElementById('basePrice').addEventListener('keypress', function(event) {
+        // Permitir la tecla Enter para actualizar
+        document.getElementById('finalPrice').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
-                calculateFinancing();
+                updatePoster();
+                event.preventDefault(); // Evitar que el formulario se envíe si lo hubiera
             }
         });
 
-        // Load example on start
+        // Cargar datos de ejemplo al iniciar
         window.onload = function() {
-            // Set current date
-            const today = new Date();
-            const day = String(today.getDate()).padStart(2, '0');
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const year = today.getFullYear();
-            document.getElementById('currentDate').textContent = `${day}/${month}/${year}`;
-
-            // Load example data
             document.getElementById('productName').value = 'KIT DE COCINA MONTESA';
-            document.getElementById('productMeasures').value = '160.7x196x38.8CM';
-            document.getElementById('productCode').value = 'ART. 2907-8977-8905';
-            document.getElementById('basePrice').value = '359999.90';
-            calculateFinancing();
+            document.getElementById('productMeasures').value = '1.60x1.96x0.38M';
+            document.getElementById('productCode').value = 'ART. 2907-8977';
+            document.getElementById('finalPrice').value = '215999';
+            updatePoster();
         };
     </script>
 </body>
