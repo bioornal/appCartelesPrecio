@@ -101,11 +101,23 @@
         #product-list li:last-child {
             border-bottom: none;
         }
-        #product-list .product-info {
+        #product-list .product-info-list {
             font-size: 14px;
         }
         #product-list .product-name-list {
             font-weight: bold;
+        }
+        #product-list .list-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        #product-list .edit-btn {
+            background: #ffc107;
+            color: #212529;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
         }
         #product-list .remove-btn {
             background: #dc3545;
@@ -133,127 +145,54 @@
             justify-content: space-around;
             text-align: center;
             background: #fff;
-            padding: 10px; /* Reducido para dar más espacio */
+            padding: 10px;
             box-sizing: border-box;
             aspect-ratio: 1 / 1.41;
-            overflow: hidden; /* Previene el desbordamiento */
+            overflow: hidden;
         }
-        .poster-content .logo {
-            max-width: 100px; /* Reducido */
-            margin: 0 auto 5px auto;
-        }
-        .poster-content .product-name {
-            font-size: 26px; /* Reducido */
-            font-weight: 900;
-            text-transform: uppercase;
-            margin: 5px 0;
-            line-height: 1.1;
-        }
-        .poster-content .product-description {
-            font-size: 14px; /* Reducido */
-            color: #000;
-            margin-bottom: 10px;
-        }
-        .poster-content .price-area {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px; /* Reducido */
-            padding: 5px 0;
-            width: 100%;
-            box-sizing: border-box;
-            flex-wrap: wrap;
-        }
-        .poster-content .price-box {
-            padding: 5px;
-        }
-        .poster-content .price-box .label {
-            font-size: 22px; /* Reducido */
-            font-weight: bold;
-        }
-        .poster-content .price-box .price-value {
-            font-size: 42px; /* Reducido */
-            font-weight: bold;
-            text-decoration: line-through;
-            text-decoration-thickness: 2px;
-        }
-        .poster-content .offer-price-box {
-            border: 4px dashed #000; /* Reducido */
-            padding: 10px;
-        }
-        .poster-content .offer-price-box .label {
-            font-size: 30px; /* Reducido */
-            font-weight: 900;
-        }
-        .poster-content .offer-price-box .price-value {
-            font-size: 75px; /* Reducido */
-            text-decoration: none;
-            line-height: 1;
-        }
-        .poster-content .discount-badge {
-            width: 100px; /* Reducido */
-            height: 100px; /* Reducido */
-            background-color: #000;
-            color: #fff;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            flex-shrink: 0;
-        }
-        .poster-content .discount-badge-content {
-            font-weight: 900;
-            line-height: 1;
-        }
-        .poster-content .discount-badge .percentage {
-            font-size: 38px; /* Reducido */
-            display: block;
-        }
-        .poster-content .discount-badge .off-text {
-            font-size: 22px; /* Reducido */
-            display: block;
-        }
+        .poster-content .logo { max-width: 100px; margin: 0 auto 5px auto; }
+        .poster-content .product-name { font-size: 26px; font-weight: 900; text-transform: uppercase; margin: 5px 0; line-height: 1.1; }
+        .poster-content .product-description { font-size: 14px; color: #000; margin-bottom: 10px; }
+        .poster-content .price-area { display: flex; justify-content: center; align-items: center; gap: 10px; padding: 5px 0; width: 100%; box-sizing: border-box; flex-wrap: wrap; }
+        .poster-content .price-box { padding: 5px; }
+        .poster-content .price-box .label { font-size: 22px; font-weight: bold; }
+        .poster-content .price-box .price-value { font-size: 42px; font-weight: bold; text-decoration: line-through; text-decoration-thickness: 2px; }
+        .poster-content .offer-price-box { border: 4px dashed #000; padding: 10px; }
+        .poster-content .offer-price-box .label { font-size: 30px; font-weight: 900; }
+        .poster-content .offer-price-box .price-value { font-size: 75px; text-decoration: none; line-height: 1; }
+        .poster-content .discount-badge { width: 100px; height: 100px; background-color: #000; color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; text-align: center; flex-shrink: 0; }
+        .poster-content .discount-badge-content { font-weight: 900; line-height: 1; }
+        .poster-content .discount-badge .percentage { font-size: 38px; display: block; }
+        .poster-content .discount-badge .off-text { font-size: 22px; display: block; }
 
         /* Contenedor de impresión, oculto por defecto */
-        .print-container {
-            display: none;
-        }
+        .print-container { display: none; }
 
         /* Media Query para la impresión */
         @media print {
-            body, html {
-                margin: 0;
-                padding: 0;
-                background: #fff;
-            }
-            .no-print {
-                display: none !important;
-            }
-            .print-container {
-                display: block !important;
-            }
+            body, html { margin: 0; padding: 0; background: #fff; }
+            .no-print { display: none !important; }
+            .print-container { display: block !important; }
             .print-page {
                 width: 210mm;
                 height: 297mm;
                 page-break-after: always;
                 box-sizing: border-box;
-                padding: 8mm; /* Margen reducido para más espacio */
+                padding: 5mm;
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 grid-template-rows: 1fr 1fr;
-                gap: 8mm; /* Espacio reducido */
+                gap: 5mm;
             }
-            /* APLICAMOS ESTILOS ESPECÍFICOS Y MÁS GRANDES PARA LA IMPRESIÓN */
             .print-page .poster-content {
                 border-width: 3px;
                 padding: 8px;
-                -webkit-print-color-adjust: exact; /* Fuerza la impresión de colores de fondo */
+                -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
             .print-page .poster-content .logo { max-width: 80px; }
-            .print-page .poster-content .product-name { font-size: 22px; }
-            .print-page .poster-content .product-description { font-size: 12px; }
+            .print-page .poster-content .product-name { font-size: 24px; }
+            .print-page .poster-content .product-description { font-size: 13px; }
             .print-page .poster-content .price-box .label { font-size: 20px; }
             .print-page .poster-content .price-box .price-value { font-size: 38px; }
             .print-page .poster-content .offer-price-box { border-width: 4px; padding: 8px; }
@@ -270,7 +209,7 @@
     <div class="main-container no-print">
         <div class="controls-section">
             <div class="card">
-                <h2>Añadir Producto</h2>
+                <h2 id="form-title">Añadir Producto</h2>
                 <form id="product-form">
                     <div class="input-group">
                         <label for="productName">Nombre del Producto:</label>
@@ -288,7 +227,7 @@
                         <label for="finalPrice">Precio de Venta Final ($):</label>
                         <input type="number" id="finalPrice" placeholder="199999.99" step="0.01" required>
                     </div>
-                    <button type="submit" class="btn">Añadir Producto a la Lista</button>
+                    <button type="submit" class="btn" id="submit-button">Añadir Producto a la Lista</button>
                 </form>
             </div>
             <div class="card">
@@ -303,77 +242,99 @@
         <div class="preview-section">
             <div class="card">
                 <h3>Previsualización de Carteles</h3>
-                <div id="poster-preview">
-                    <!-- La previsualización de los carteles se inyectará aquí -->
-                </div>
+                <div id="poster-preview"></div>
             </div>
         </div>
     </div>
 
-    <!-- Contenido real que se enviará a la impresora -->
     <div class="print-container" id="print-area"></div>
 
     <script>
         let products = [];
+        let editingProductId = null;
 
         const productForm = document.getElementById('product-form');
         const productListUl = document.querySelector('#product-list ul');
         const emptyListMsg = document.getElementById('empty-list-msg');
         const posterPreview = document.getElementById('poster-preview');
         const printArea = document.getElementById('print-area');
+        const submitButton = document.getElementById('submit-button');
+        const formTitle = document.getElementById('form-title');
 
-        productForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            addProduct();
-        });
+        productForm.addEventListener('submit', handleFormSubmit);
 
         function roundToNearestHundred(num) {
             return Math.round(num / 100) * 100;
         }
 
         function formatNumber(num) {
-            return '$' + num.toLocaleString('es-AR', {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }).replace(/,/g, '.');
+            return '$' + num.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace(/,/g, '.');
         }
 
-        function addProduct() {
-            const productName = document.getElementById('productName').value;
-            const productMeasures = document.getElementById('productMeasures').value;
-            const productCode = document.getElementById('productCode').value;
-            const finalPriceInput = parseFloat(document.getElementById('finalPrice').value);
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const productData = {
+                name: document.getElementById('productName').value,
+                measures: document.getElementById('productMeasures').value,
+                code: document.getElementById('productCode').value,
+                price: parseFloat(document.getElementById('finalPrice').value)
+            };
 
-            if (!productName || finalPriceInput <= 0) {
+            if (!productData.name || !productData.price || productData.price <= 0) {
                 alert('El nombre del producto y un precio válido son obligatorios.');
                 return;
             }
 
-            const product = {
-                id: Date.now(), // ID único para el producto
-                name: productName,
-                measures: productMeasures,
-                code: productCode,
-                price: finalPriceInput
-            };
+            if (editingProductId) {
+                const index = products.findIndex(p => p.id === editingProductId);
+                products[index] = { ...products[index], ...productData };
+                cancelEdit();
+            } else {
+                products.push({ id: Date.now(), ...productData });
+            }
 
-            products.push(product);
             productForm.reset();
             document.getElementById('productName').focus();
-            
             renderUI();
         }
 
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productMeasures').value = product.measures;
+            document.getElementById('productCode').value = product.code;
+            document.getElementById('finalPrice').value = product.price;
+
+            editingProductId = id;
+            formTitle.textContent = 'Editando Producto';
+            submitButton.textContent = 'Guardar Cambios';
+            submitButton.style.backgroundColor = '#ffc107';
+            window.scrollTo(0, 0);
+            document.getElementById('productName').focus();
+        }
+
+        function cancelEdit() {
+            editingProductId = null;
+            formTitle.textContent = 'Añadir Producto';
+            submitButton.textContent = 'Añadir Producto a la Lista';
+            submitButton.style.backgroundColor = '#007bff';
+            productForm.reset();
+        }
+
         function removeProduct(id) {
+            if (editingProductId === id) {
+                cancelEdit();
+            }
             products = products.filter(p => p.id !== id);
             renderUI();
         }
 
         function createPosterHTML(product) {
             const finalPrice = roundToNearestHundred(product.price);
-            const listPrice = roundToNearestHundred(finalPrice / 0.90); // Descuento del 10%
+            const listPrice = roundToNearestHundred(finalPrice * 1.10); // Recargo del 10%
             const discountPercentage = 10;
-
             let description = product.measures;
             if (product.code) {
                 description += (description ? ' - ' : '') + product.code;
@@ -400,32 +361,27 @@
                             <div class="price-value">${formatNumber(finalPrice)}</div>
                         </div>
                     </div>
-                </div>
-            `;
+                </div>`;
         }
 
         function renderUI() {
-            // Limpiar todo
             productListUl.innerHTML = '';
             posterPreview.innerHTML = '';
-
-            // Actualizar mensaje de lista vacía
             emptyListMsg.style.display = products.length === 0 ? 'block' : 'none';
 
-            // Renderizar lista y previsualización
             products.forEach((product, index) => {
-                // Añadir a la lista
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
-                    <div class="product-info">
+                    <div class="product-info-list">
                         <span class="product-name-list">${index + 1}. ${product.name}</span><br>
                         <span>${formatNumber(product.price)}</span>
                     </div>
-                    <button class="remove-btn" onclick="removeProduct(${product.id})">Quitar</button>
-                `;
+                    <div class="list-buttons">
+                        <button class="edit-btn" onclick="editProduct(${product.id})">Editar</button>
+                        <button class="remove-btn" onclick="removeProduct(${product.id})">Quitar</button>
+                    </div>`;
                 productListUl.appendChild(listItem);
 
-                // Añadir a la previsualización
                 const previewItem = document.createElement('div');
                 previewItem.innerHTML = createPosterHTML(product);
                 posterPreview.appendChild(previewItem);
@@ -437,43 +393,23 @@
                 alert("No hay productos en la lista para imprimir.");
                 return;
             }
-
             printArea.innerHTML = '';
             let pageContent = '';
-            
             products.forEach((product, index) => {
                 if (index % 4 === 0) {
-                    pageContent += `<div class="print-page">`;
+                    pageContent += (index > 0 ? '</div>' : '') + '<div class="print-page">';
                 }
-
                 pageContent += createPosterHTML(product);
-
-                if ((index + 1) % 4 === 0 || (index + 1) === products.length) {
-                    pageContent += `</div>`;
-                }
             });
-
+            pageContent += '</div>';
             printArea.innerHTML = pageContent;
             window.print();
         }
 
-        // Cargar datos de ejemplo para demostración inicial
-        window.onload = function() {
-            addProductToList({
-                id: Date.now(),
-                name: 'KIT DE COCINA MONTESA',
-                measures: '1.60x1.96x0.38M',
-                code: 'ART. 2907-8977',
-                price: 215999
-            });
+        window.onload = () => {
             renderUI();
             document.getElementById('productName').focus();
         };
-
-        function addProductToList(product) {
-            products.push(product);
-        }
-
     </script>
 </body>
 </html>
