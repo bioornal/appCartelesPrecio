@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Carteles de Oferta - Muebles Online</title>
+    <title>Generador de 4 Carteles de Oferta por Hoja - Muebles Online</title>
     <style>
         /* Estilos para la interfaz de usuario (no se imprimen) */
         body {
@@ -12,21 +12,39 @@
             background-color: #f4f6f9;
         }
         .container {
-            max-width: 600px;
+            max-width: 900px;
             margin: 0 auto;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             overflow: hidden;
         }
-        .input-section {
+        .main-controls {
             padding: 25px;
+            border-bottom: 1px solid #eee;
         }
-        .input-section h2 {
+        .main-controls h2 {
             margin-top: 0;
             margin-bottom: 20px;
             font-size: 24px;
             color: #333;
+        }
+        #forms-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 25px;
+        }
+        .product-form {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #fdfdfd;
+        }
+        .product-form h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #007bff;
         }
         .input-group {
             margin-bottom: 15px;
@@ -40,10 +58,10 @@
         }
         .input-group input, .input-group textarea {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #ddd;
             border-radius: 6px;
-            font-size: 16px;
+            font-size: 14px;
             box-sizing: border-box;
             transition: border-color 0.2s;
         }
@@ -88,14 +106,18 @@
             color: #333;
         }
         #poster-preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
             border: 1px solid #ccc;
             background-color: #fff;
-            min-height: 450px;
+            padding: 15px;
+            min-height: 600px;
         }
 
-        /* Estilos para el cartel (aplican a la previsualización y a la impresión) */
+        /* Estilos base para el cartel */
         .poster-content {
-            border: 4px solid #000;
+            border: 2px solid #000;
             width: 100%;
             height: 100%;
             display: flex;
@@ -103,68 +125,73 @@
             justify-content: space-around;
             text-align: center;
             background: #fff;
-            padding: 15px;
+            padding: 8px;
             box-sizing: border-box;
+            overflow: hidden; /* Para evitar desbordamientos */
+        }
+        .poster-content.empty {
+            background-color: #f0f0f0;
+            border-style: dashed;
         }
         .poster-content .logo {
-            max-width: 130px;
-            margin: 0 auto 10px auto;
+            max-width: 60px;
+            margin: 0 auto 5px auto;
         }
         .poster-content .product-name {
-            font-size: 30px;
+            font-size: 16px;
             font-weight: 900;
             text-transform: uppercase;
-            margin: 10px 0;
-            line-height: 1.2;
+            margin: 5px 0;
+            line-height: 1.1;
         }
         .poster-content .product-description {
-            font-size: 16px;
+            font-size: 8px;
             color: #000;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
         .poster-content .price-area {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
-            padding: 10px 0;
+            gap: 8px;
+            padding: 5px 0;
             width: 100%;
             box-sizing: border-box;
             flex-wrap: wrap;
         }
         .poster-content .price-box {
-            padding: 5px 10px;
+            padding: 2px 5px;
         }
         .poster-content .price-box .label {
-            font-size: 26px;
+            font-size: 12px;
             font-weight: bold;
             color: #000;
         }
         .poster-content .price-box .price-value {
-            font-size: 48px;
+            font-size: 22px;
             font-weight: bold;
             color: #000;
             text-decoration: line-through;
-            text-decoration-thickness: 3px;
+            text-decoration-thickness: 1px;
         }
         .poster-content .offer-price-box {
-            border: 5px dashed #000;
-            padding: 15px;
+            border: 3px dashed #000;
+            padding: 8px;
         }
         .poster-content .offer-price-box .label {
-            font-size: 36px;
+            font-size: 16px;
             color: #000;
             font-weight: 900;
         }
         .poster-content .offer-price-box .price-value {
-            font-size: 90px;
+            font-size: 40px;
             color: #000;
             text-decoration: none;
             line-height: 1;
         }
         .poster-content .discount-badge {
-            width: 130px;
-            height: 130px;
+            width: 60px;
+            height: 60px;
             background-color: #000;
             color: #fff;
             border-radius: 50%;
@@ -179,11 +206,11 @@
             line-height: 1;
         }
         .poster-content .discount-badge .percentage {
-            font-size: 44px;
+            font-size: 22px;
             display: block;
         }
         .poster-content .discount-badge .off-text {
-            font-size: 26px;
+            font-size: 12px;
             display: block;
         }
 
@@ -203,12 +230,18 @@
                 display: none !important;
             }
             .print-container {
-                display: block !important; /* Se muestra solo al imprimir */
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
+                display: grid !important;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr 1fr;
+                width: 210mm;  /* Ancho A4 */
+                height: 297mm; /* Alto A4 */
+                box-sizing: border-box;
+                padding: 5mm; /* Margen de la impresora */
+                gap: 5mm;
+            }
+            /* Asegurarse de que el contenido del cartel no se rompa entre páginas */
+            .poster-content {
+                page-break-inside: avoid;
             }
         }
     </style>
@@ -216,43 +249,60 @@
 <body>
 
     <div class="container no-print">
-        <div class="input-section">
-            <h2>Generador de Carteles</h2>
-            <div class="input-group">
-                <label for="productName">Nombre del Producto:</label>
-                <input type="text" id="productName" placeholder="Ej: PLACARD LAREDO">
-            </div>
-            <div class="input-group">
-                <label for="productMeasures">Medidas:</label>
-                <input type="text" id="productMeasures" placeholder="Ej: 1.80x2.20x0.60M">
-            </div>
-            <div class="input-group">
-                <label for="productCode">Descripción/Código:</label>
-                <textarea id="productCode" placeholder="Ej: ART. 2907-8977" rows="2"></textarea>
-            </div>
-            <div class="input-group">
-                <label for="finalPrice">Precio de Venta Final ($):</label>
-                <input type="number" id="finalPrice" placeholder="199999.99" step="0.01">
-            </div>
+        <div class="main-controls">
+            <h2>Generador de Carteles (4 por página)</h2>
             <div class="button-group">
-                <button class="btn" onclick="updatePoster()">Actualizar Cartel</button>
+                <button class="btn" onclick="updateAllPosters()">Actualizar Carteles</button>
                 <button class="btn btn-print" onclick="window.print()">Imprimir</button>
             </div>
         </div>
+        <div id="forms-container">
+            <!-- Los 4 formularios se generarán aquí con JS -->
+        </div>
         <div class="poster-preview-container">
-            <h3>Previsualización de Impresión:</h3>
+            <h3>Previsualización de Impresión (Hoja A4):</h3>
             <div id="poster-preview">
-                <!-- La previsualización del cartel se inyectará aquí -->
+                <!-- La previsualización de los 4 carteles se inyectará aquí -->
             </div>
         </div>
     </div>
 
     <!-- Contenido real que se enviará a la impresora -->
     <div class="print-container" id="poster-for-print">
-        <!-- El contenido del cartel se inyectará aquí desde el script -->
+        <!-- El contenido de los 4 carteles se inyectará aquí desde el script -->
     </div>
 
     <script>
+        const NUM_POSTERS = 4;
+
+        function createForms() {
+            const container = document.getElementById('forms-container');
+            for (let i = 1; i <= NUM_POSTERS; i++) {
+                const formHTML = `
+                    <div class="product-form" id="form-${i}">
+                        <h3>Producto ${i}</h3>
+                        <div class="input-group">
+                            <label for="productName-${i}">Nombre del Producto:</label>
+                            <input type="text" id="productName-${i}" placeholder="Ej: PLACARD LAREDO">
+                        </div>
+                        <div class="input-group">
+                            <label for="productMeasures-${i}">Medidas:</label>
+                            <input type="text" id="productMeasures-${i}" placeholder="Ej: 1.80x2.20x0.60M">
+                        </div>
+                        <div class="input-group">
+                            <label for="productCode-${i}">Descripción/Código:</label>
+                            <textarea id="productCode-${i}" placeholder="Ej: ART. 2907-8977" rows="1"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="finalPrice-${i}">Precio de Venta Final ($):</label>
+                            <input type="number" id="finalPrice-${i}" placeholder="199999.99" step="0.01">
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += formHTML;
+            }
+        }
+
         function roundToNearestHundred(num) {
             return Math.round(num / 100) * 100;
         }
@@ -264,80 +314,94 @@
             }).replace(/,/g, '.');
         }
 
-        function updatePoster() {
-            const productName = document.getElementById('productName').value || 'PRODUCTO';
-            const productMeasures = document.getElementById('productMeasures').value || '';
-            const productCode = document.getElementById('productCode').value || '';
-            const finalPriceInput = parseFloat(document.getElementById('finalPrice').value) || 0;
+        function updateAllPosters() {
+            let allPostersHTML = '';
 
-            if (finalPriceInput <= 0) {
-                alert('Por favor, ingrese un precio de venta válido.');
-                return;
-            }
+            for (let i = 1; i <= NUM_POSTERS; i++) {
+                const productName = document.getElementById(`productName-${i}`).value;
+                
+                if (!productName.trim()) {
+                    // Si no hay nombre de producto, agregar un cartel vacío
+                    allPostersHTML += '<div class="poster-content empty"></div>';
+                    continue;
+                }
 
-            // Redondear el precio final a la centena más cercana.
-            const finalPrice = roundToNearestHundred(finalPriceInput);
-            
-            // Calcular el precio de lista para que el precio final sea un 15% de descuento.
-            // Formula: listPrice * (1 - 0.15) = finalPrice  =>  listPrice = finalPrice / 0.85
-            const listPrice = roundToNearestHundred(finalPrice / 0.85);
-            
-            // El descuento ahora es un 15% fijo.
-            const discountPercentage = 15;
+                const productMeasures = document.getElementById(`productMeasures-${i}`).value || '';
+                const productCode = document.getElementById(`productCode-${i}`).value || '';
+                const finalPriceInput = parseFloat(document.getElementById(`finalPrice-${i}`).value) || 0;
 
-            let description = productMeasures;
-            if (productCode) {
-                description += (description ? ' - ' : '') + productCode;
-            }
+                if (finalPriceInput <= 0) {
+                    alert(`Por favor, ingrese un precio de venta válido para el Producto ${i}.`);
+                    // Agregar un cartel vacío si el precio es inválido
+                    allPostersHTML += '<div class="poster-content empty"></div>';
+                    continue;
+                }
 
-            const posterHTML = `
-                <div class="poster-content">
-                    <div class="print-header">
-                        <img src="https://res.cloudinary.com/djtvjkcu6/image/upload/v1751206020/MegaMuebles/logoRedondo_f7kulu.png" alt="Logo" class="logo">
-                    </div>
-                    <div class="product-info">
-                        <h1 class="product-name">${productName.toUpperCase()}</h1>
-                        <p class="product-description">${description}</p>
-                    </div>
-                    <div class="price-area">
-                        <div class="price-box">
-                            <span class="label">ANTES</span>
-                            <div class="price-value">${formatNumber(listPrice)}</div>
+                const finalPrice = roundToNearestHundred(finalPriceInput);
+                const listPrice = roundToNearestHundred(finalPrice / 0.85);
+                const discountPercentage = 15;
+
+                let description = productMeasures;
+                if (productCode) {
+                    description += (description ? ' - ' : '') + productCode;
+                }
+
+                const posterHTML = `
+                    <div class="poster-content">
+                        <div class="print-header">
+                            <img src="https://res.cloudinary.com/djtvjkcu6/image/upload/v1751206020/MegaMuebles/logoRedondo_f7kulu.png" alt="Logo" class="logo">
                         </div>
-                        <div class="discount-badge">
-                            <div class="discount-badge-content">
-                                <span class="percentage">${discountPercentage}%</span>
-                                <span class="off-text">OFF</span>
+                        <div class="product-info">
+                            <h1 class="product-name">${productName.toUpperCase()}</h1>
+                            <p class="product-description">${description}</p>
+                        </div>
+                        <div class="price-area">
+                            <div class="price-box">
+                                <span class="label">ANTES</span>
+                                <div class="price-value">${formatNumber(listPrice)}</div>
+                            </div>
+                            <div class="discount-badge">
+                                <div class="discount-badge-content">
+                                    <span class="percentage">${discountPercentage}%</span>
+                                    <span class="off-text">OFF</span>
+                                </div>
+                            </div>
+                            <div class="price-box offer-price-box">
+                                <span class="label">¡OFERTA!</span>
+                                <div class="price-value">${formatNumber(finalPrice)}</div>
                             </div>
                         </div>
-                        <div class="price-box offer-price-box">
-                            <span class="label">¡OFERTA!</span>
-                            <div class="price-value">${formatNumber(finalPrice)}</div>
-                        </div>
                     </div>
-                </div>
-            `;
+                `;
+                allPostersHTML += posterHTML;
+            }
 
             // Actualizar tanto la previsualización como el contenedor de impresión
-            document.getElementById('poster-preview').innerHTML = posterHTML;
-            document.getElementById('poster-for-print').innerHTML = posterHTML;
+            document.getElementById('poster-preview').innerHTML = allPostersHTML;
+            document.getElementById('poster-for-print').innerHTML = allPostersHTML;
         }
-
-        // Permitir la tecla Enter para actualizar
-        document.getElementById('finalPrice').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                updatePoster();
-                event.preventDefault(); // Evitar que el formulario se envíe si lo hubiera
-            }
-        });
 
         // Cargar datos de ejemplo al iniciar
         window.onload = function() {
-            document.getElementById('productName').value = 'KIT DE COCINA MONTESA';
-            document.getElementById('productMeasures').value = '1.60x1.96x0.38M';
-            document.getElementById('productCode').value = 'ART. 2907-8977';
-            document.getElementById('finalPrice').value = '215999';
-            updatePoster();
+            createForms(); // Crear los 4 formularios dinámicamente
+
+            // Llenar el primer formulario con datos de ejemplo
+            document.getElementById('productName-1').value = 'KIT DE COCINA MONTESA';
+            document.getElementById('productMeasures-1').value = '1.60x1.96x0.38M';
+            document.getElementById('productCode-1').value = 'ART. 2907-8977';
+            document.getElementById('finalPrice-1').value = '215999';
+            
+            // Añadir listeners para la tecla Enter en todos los campos de precio
+            for (let i = 1; i <= NUM_POSTERS; i++) {
+                document.getElementById(`finalPrice-${i}`).addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        updateAllPosters();
+                        event.preventDefault();
+                    }
+                });
+            }
+
+            updateAllPosters(); // Actualizar todos los carteles al cargar
         };
     </script>
 </body>
